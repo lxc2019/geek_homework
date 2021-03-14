@@ -1,0 +1,93 @@
+删除排序数组中的重复项:
+class Solution {
+    public int removeDuplicates(int[] nums) {
+ if (nums.length==0) return 0;
+ int p=0;
+ int q=1;
+
+ while (q<nums.length){
+     if (nums[p]==nums[q]){
+           q++;
+     }else {
+         nums[++p]=nums[q];
+     }
+ }
+return p+1;
+
+    }
+}
+
+移动零
+class Solution {
+    public void moveZeroes(int[] nums) {
+ 
+if(nums==null) {
+            return;
+        }
+    
+        int j = 0;
+        for(int i=0;i<nums.length;i++) {  
+            if(nums[i]!=0) {
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+       
+        for(int i=j;i<nums.length;i++) {
+            nums[i] = 0;
+        }
+
+    }
+}
+
+两数之和
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+    int []a=new int[2];
+    for (int p=0;p<nums.length;p++){
+        for (int q=p+1;q<nums.length;q++){
+            if(nums[p]+nums[q]==target){
+                a[0]=p;
+                a[1]=q;
+                return a;
+            }
+        }
+    }
+  return a;
+
+    }
+}
+
+合并两个有序数组
+
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int len1 = m - 1;
+        int len2 = n - 1;
+        int len = m + n - 1;
+
+        while(len1 >= 0 && len2 >= 0) {
+           
+            nums1[len--] = nums1[len1] > nums2[len2] ? nums1[len1--] : nums2[len2--];
+        }
+        System.arraycopy(nums2, 0, nums1, 0, len2 + 1);
+    }
+}
+
+
+合并两个有序链表
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+
+if (l1==null) return l2;
+if (l2==null) return l1;
+if (l1.val<=l2.val){
+    l1.next =mergeTwoLists(l1.next,l2);
+    return l1;
+}else {
+    l2.next=mergeTwoLists(l1,l2.next);
+    return l2;
+}
+    }
+}
