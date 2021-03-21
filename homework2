@@ -1,0 +1,100 @@
+169. 多数元素
+class Solution {
+    public int majorityElement(int[] nums) {
+    int count=1;
+    int a=nums[0];
+    for (int i =1;i<nums.length;i++){
+        if (nums[i]==a){ count ++;}else{ 
+            count --;
+            if (count==0){a=nums[i+1]; }
+        }
+    }
+    return a;
+    }
+}
+
+860. 柠檬水找零
+class Solution {
+    public boolean lemonadeChange(int[] bills) {
+
+    int five = 0, ten = 0;
+        for (int bill : bills) {
+            if (bill == 5) {
+                five++;
+            } else if (bill == 10) {
+               if (five>0) { five--; ten++;}else {return false;}
+            }else {
+                if (five > 0 && ten > 0) {
+                    five--;
+                    ten--;
+                } else if (five >= 3) {
+                   five=five-3;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+}
+
+
+122. 买卖股票的最佳时机 II
+class Solution {
+    public int maxProfit(int[] prices) {
+
+  int p= 0;
+         for (int i = 1; i < prices.length; i++) {
+       
+            if ( prices[i] - prices[i - 1] > 0) p =p+ prices[i] - prices[i - 1];
+            
+
+        }
+        return p;
+
+    }
+}
+
+455. 分发饼干
+class Solution {
+    public int findContentChildren(int[] g, int[] s) {
+
+        int child = 0;
+        int cookie = 0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        while (child < g.length && cookie < s.length ){
+            if (g[child] <= s[cookie]){
+                child++;
+            }
+            cookie++;
+        }
+        return child;
+
+
+    }
+}
+
+
+50. Pow(x, n)
+
+class Solution {
+    public double myPow(double x, int n) {
+
+double res =1.0;
+long N =n;
+if (n<0){
+    N=-N;
+}
+
+
+for (long i=N;i>0;i=i/2){
+    if(i%2==1){
+        res=res*x;
+    }
+    x=x*x;
+}
+  return res;
+    }
+}
