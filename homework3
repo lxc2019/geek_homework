@@ -1,0 +1,137 @@
+
+32. 最长有效括号
+class Solution {
+
+    public int longestValidParentheses(String s) {
+        if(s.length() <= 1)     return 0;
+        char[] chars = s.toCharArray();
+
+        int[] dp = new int[chars.length];
+        dp[1] = chars[0] == '(' && chars[1] == ')' ? 2 : 0;
+
+        int max = dp[1];
+        for(int i = 2; i < chars.length; i++)
+        {
+            if(chars[i] == '(')     dp[i] = 0;
+            else
+            {
+                if(chars[i-1] == '(')
+                    dp[i] = dp[i-2] + 2;
+
+                else
+                {
+                    if(i - dp[i-1] - 1 < 0 || chars[i - dp[i-1] -1] == ')')
+                    //不存在左括号
+                        dp[i] = 0;
+                    else
+                        dp[i] = i - dp[i-1] - 1 >= 1 ?  2 + dp[i-1] + dp[i - dp[i-1] - 2]: 2 + dp[i-1];
+                        //存在左括号：1左括号之前还有括号； 2 左括号之前无括号了。
+                }
+            }
+
+            max = Math.max(max, dp[i]);
+        }
+
+        return max;
+    }
+}
+
+72. 编辑距离
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int len1 = word1.length();
+        int len2 = word2.length();
+
+        int[][] dp = new int[len1 + 1][len2 + 1];
+
+        // 插入操作
+        for(int i = 1; i <= len1; i++) {
+            dp[i][0] = dp[i - 1][0] + 1;
+        }
+
+        // 删除操作
+        for(int j = 1;j <= len2; j++) {
+            dp[0][j] = dp[0][j - 1] + 1;
+        }
+
+        for(int i = 1; i <= len1; i++) {
+            for(int j = 1; j <= len2; j++) {
+                   dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i - 1][j - 1], dp[i][j - 1])) + 1;
+
+                if(word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - 1]);
+                }
+            }
+        }
+
+        return dp[len1][len2];
+    }
+}
+
+410. 分割数组的最大值
+
+
+class Solution {
+    public int splitArray(int[] nums, int m) {
+        int n = nums.length;
+        int[][] f = new int[n + 1][m + 1];
+        for (int i = 0; i <= n; i++) {
+            Arrays.fill(f[i], Integer.MAX_VALUE);
+        }
+        int[] sub = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            sub[i + 1] = sub[i] + nums[i];
+        }
+        f[0][0] = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= Math.min(i, m); j++) {
+                for (int k = 0; k < i; k++) {
+                    f[i][j] = Math.min(f[i][j], Math.max(f[k][j - 1], sub[i] - sub[k]));
+                }
+            }
+        }
+        return f[n][m];
+    }
+}
+
+
+
+647. 回文子串
+class Solution {
+    public int countSubstrings(String s) {
+       
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        int ans = 0;
+
+        for (int j = 0; j < s.length(); j++) {
+            for (int i = 0; i <= j; i++) {
+                 if(s.charAt(i)==s.charAt(j) && (j-i<3 ||(dp[i][j]= dp[i+1][j-1]))) {
+                    dp[i][j] = true;
+                    ans++;
+                }
+            }
+        }
+
+        return ans;
+    }
+}
+
+64. 最小路径和
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int n=grid.length ;
+        int m=grid[0].length;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(i == 0 && j == 0) continue;
+
+                else if(i == 0)  grid[i][j] = grid[i][j - 1] + grid[i][j];
+                //(0,j)行标为0，列标不为0，表示网格最上方边界的单元格
+                else if(j == 0)  grid[i][j] = grid[i - 1][j] + grid[i][j];
+                //(i,0)行标不为0，列标为0，表示网格最左方边界的单元格
+                else grid[i][j] = Math.min(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+            }
+        }
+        return grid[n - 1][m - 1];
+    }
+}
