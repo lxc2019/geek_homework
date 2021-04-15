@@ -1,0 +1,238 @@
+1、刷题方法
+
+五遍刷题方法（过遍数），直接看答案，记忆背诵，一题多解。
+
+2、数据结构与算法
+
+Array 数组   Linked List链表  Stack栈  Queue 队列 HashTable 哈希表
+
+Set Map  HashMap  二叉树  递归  DFS BFS 分治  回溯 二分查找
+
+3、模板例子
+
+二叉树中序遍历：
+
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res =new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        while (root!=null|| !stack.isEmpty()){
+            while (root!=null){
+                stack.push(root);
+         //每一个元素进栈的下一步即要遍历寻找它的左孩子（进栈是一直往左进到彻底，到底就开始退栈逐步返回）
+                root=root.left;
+
+            }
+        root =stack.pop();
+        //左孩子遍历完，要退栈（退回前一步），在退回环节纪录当前节点
+        res.add(root.val);
+        root=root.right;
+        //每退回一步要检查遍历 退回到当前位置 的右孩子
+        }
+    return res;
+    }
+}
+
+先序遍历：
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+    List<Integer> res =new ArrayList<>(); //需要一个列表数组存放遍历完的结果
+   // Deque<TreeNode>stack =new ArrayDeque<>(); //需要一个辅助队列，进行入栈出栈操作
+   Stack<TreeNode> stack = new Stack<TreeNode>();
+    while (root!=null|| !stack.isEmpty()){
+        while (root!=null){
+            res.add(root.val);
+            stack.push(root);
+            root=root.left;
+      }
+      //TreeNode cur =stack.pop();
+     // root=cur.right;
+        root =stack.pop();
+        root =root.right;
+    }
+    return res;
+    }
+}
+后续遍历：
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+    List<Integer> res =new ArrayList<>();
+    Stack<TreeNode> stack = new Stack<TreeNode>();
+    while (root!=null|| !stack.isEmpty()){
+        while (root!=null){
+            res.add(root.val);
+            stack.push(root);
+            root=root.right;
+      }
+      TreeNode cur =stack.pop();
+      root=cur.left;
+    }
+    Collections.reverse(res);
+    return res;
+
+    }
+}
+
+冒泡排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+      
+     for (int i=0;i<nums.length-1;i++){
+         for (int j=0;j<nums.length-1;j++){
+ //由于比较的最后一个元素是nums[j+1]，length-1防止越界
+             if(nums[j]>nums[j+1]){
+                 int temp=nums[j];
+                 nums[j]=nums[j+1];
+                 nums[j+1]=temp;
+             }
+         }
+     }
+     return nums;
+    }
+}
+
+选择排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+      //选择排序
+        for (int i=0;i<nums.length-1;i++){ 
+            int min=nums[i];
+            int minindex= i;
+            for (int j=i;j<nums.length;j++){
+             if(nums[j]<min){  //[4,5,3,2,1] 
+                 minindex=j; //for 循环内发现，纪录（当前轮）最小值（更新前面的min值）
+                 min=nums[j];   
+                }
+            }
+            int temp =nums[minindex]; //for循环找到当前轮最小值后，再进行交换。
+             nums[minindex]=nums[i];
+                nums[i]=temp;
+             }
+    return nums;
+    }
+}
+
+插入排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+    //插入排序
+        for(int i=1;i<nums.length;i++){
+    //以i=1，作为待插入元素的起始标的（不是0,0已经有序）
+            int inserval =nums[i];
+            int j=i-1;
+     //j为有序数组中最后一位元素，i与有序数组最后一位元素的关系：i为1时，有序数组最后一位元素下标就为i-1=0
+            while(j>=0&& nums[j]>inserval){
+                nums[j+1]=nums[j]; //循环进行移动，从后往前移（从无序区到有序区的移动）
+                j--;
+            }
+            nums[j+1]=inserval;//循环结束找到在有序数组的放置位置，将待插入值放置在该位置。
+        }
+
+      return nums;
+    }
+}
+
+快速排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+        if(nums.length <=1)return nums;
+        qSort(nums,0,nums.length-1); //快速排序
+    return nums;
+   }
+    private static  void qSort(int []nums,int start,int end){
+    //或 void qSort(int []nums,int start,int end)
+    // 或 int []   qSort(int []nums,int start,int end) 则最后返回为：return nums;
+       int low =start;
+       int high =end;
+       int temp=nums[low]; //初始选择nums[low]作为标杆，放入临时变量temp中
+       while (low<high){
+           while(low<high&&nums[high]>=temp){// nums[high]>=temp包含与标的相等的元素，出现相同时也跳过
+               high--; //从大（大于标杆）中找小（小于标杆）
+           }
+            nums[low]=nums[high];
+            while(low<high&& nums[low]<=temp){
+                low++;  //从小（小于标杆）中找大（大于标杆）
+            }
+             nums[high]=nums[low];
+       }
+       nums[high]=temp;//或nums[low]=temp，每轮确定出一个标杆的全局位置，将该标杆放入该位置
+
+       if(start<low-1){  qSort(nums,start,low-1);  } //上一轮的标杆分出的两个区间中，各自递归选标杆
+       if (low+1<end){   qSort(nums,low+1,end);   }
+          return;
+   }
+}
+
+归并排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int [] temp= new int[nums.length]; //归并排序
+        sort(nums,0,nums.length-1,temp);
+        return nums;
+    }
+    void sort(int []nums,int l, int r,int []temp){
+        int m=(l+r)/2;
+        if(l<r){
+            sort(nums,l,m,temp);
+            sort(nums,m+1,r,temp);
+            merge(nums,l,r,temp);
+        }
+    }
+    void merge (int []nums,int l,int r,int[]temp){
+        int m=(l+r)/2;
+        int a=l;
+        int b=m+1;
+        int index=0;
+        while(a<=m&&b<=r){
+            if(nums[a]<nums[b])
+                  {  temp[index++]=nums[a++]; }
+            else  {  temp[index++]=nums[b++]; }
+        }
+        while(a<=m){  temp[index++]=nums[a++]; }
+        while(b<=r) { temp[index++]=nums[b++];  }
+        index=0;
+        while(l<=r) {  nums[l++]=temp[index++];  } //while循环一直将temp数组元素放入nums数组中
+    }
+}
+
+堆排序：
+class Solution {
+    public int[] sortArray(int[] nums) {
+             sort(nums); //堆排序
+             return nums;
+    }
+    void sort(int []nums){
+        //1.构建大顶堆
+        for(int i=nums.length/2-1;i>=0;i--){
+        //https://www.bilibili.com/video/BV1h5411b7VS?from=search&seid=15524795413280396430
+        //从第一个非叶子结点从下至上，从右至左调整结构
+            adjustHeap(nums,i,nums.length);
+        }
+        //2.调整堆结构+交换堆顶元素与末尾元素
+        for(int j=nums.length-1;j>0;j--){  //https://www.bilibili.com/video/BV1jZ4y1T79f
+            swap(nums,0,j);//将堆顶元素与末尾元素进行交换
+            adjustHeap(nums,0,j);//重新对堆进行调整
+        }
+    }
+     void adjustHeap(int []nums,int i,int length){
+        int temp = nums[i];//先取出当前元素i
+        for(int k=i*2+1;k<length;k=k*2+1){//从i结点的左子结点开始，也就是2i+1处开始
+            if(k+1<length && nums[k]<nums[k+1]){//如果左子结点小于右子结点，k指向右子结点
+                k++;
+            }
+            if(nums[k] >temp){//如果子节点大于父节点，将子节点值赋给父节点
+                nums[i] = nums[k];
+                i = k;
+            }else{
+                break;
+            }
+        }
+        nums[i] = temp;//将temp值放到最终的位置
+    }
+     public static void swap(int []nums,int a ,int b){
+        int temp=nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+
